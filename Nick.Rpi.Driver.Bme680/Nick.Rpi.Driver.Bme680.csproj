@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>nick@nickrandell.com</Authors>
+    <Description>Raspberry PI driver for BME680</Description>
+    <Version>1.0.0-beta.1</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content CopyToOutputDirectory="PreserveNewest" Include="./libbme680.so" Pack="true" PackagePath="runtimes/debian-arm/native/libbme680.so" />
+  </ItemGroup>
+
+</Project>

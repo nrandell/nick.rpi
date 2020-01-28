@@ -1,0 +1,1 @@
+﻿docker buildx build -t nrandell/temperature.rpi:0.1 --build-arg NUGET_API_KEY=$env:NUGET_API_KEY --load -f Dockerfile ..

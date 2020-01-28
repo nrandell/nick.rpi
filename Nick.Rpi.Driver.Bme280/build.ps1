@@ -1,0 +1,1 @@
+docker buildx build --platform linux/arm/v7 -t nrandell/bme280.rpi:0.1 --build-arg NUGET_API_KEY=$env:NUGET_API_KEY --load -f Dockerfile ..
