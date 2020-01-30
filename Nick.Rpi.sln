@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.dockerignore = .dockerignore
 		Directory.Build.props = Directory.Build.props
+		LICENSE = LICENSE
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nick.Rpi.Driver.Bme280", "Nick.Rpi.Driver.Bme280\Nick.Rpi.Driver.Bme280.csproj", "{037EC7D9-54B3-43ED-96ED-80DAAE8486C3}"
@@ -21,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nick.Rpi.Driver.Max44009", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestMax44009", "TestMax44009\TestMax44009.csproj", "{ED48B87B-3FDB-401D-8D75-7F2225EB7585}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nick.Rpi.Driver.Temperature", "Nick.Rpi.Driver.Temperature\Nick.Rpi.Driver.Temperature.csproj", "{E55C4E52-9BDA-4278-B58D-DE20761569D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nick.Rpi.Driver.Temperature", "Nick.Rpi.Driver.Temperature\Nick.Rpi.Driver.Temperature.csproj", "{E55C4E52-9BDA-4278-B58D-DE20761569D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestOneWire", "TestOneWire\TestOneWire.csproj", "{B6FABD85-53CF-469D-9788-36184D84C1C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestOneWire", "TestOneWire\TestOneWire.csproj", "{B6FABD85-53CF-469D-9788-36184D84C1C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
