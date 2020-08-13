@@ -4,9 +4,9 @@ using uint16_t = System.UInt16;
 using uint32_t = System.UInt32;
 using uint8_t = System.Byte;
 
-namespace Nick.Rpi.Driver.Bme680
+namespace Nick.Rpi.Driver
 {
-    public static class Constants
+    internal static class Constants
     {
         /** BME680 General config */
         public const uint8_t BME680_POLL_PERIOD_MS = 10;
@@ -225,6 +225,5 @@ namespace Nick.Rpi.Driver.Bme680
          * i.e Comparing value, BME680_MAX_OVERFLOW_VAL = INT32_C(1 << 30;
          */
         public const int32_t BME680_MAX_OVERFLOW_VAL = 0x40000000;
-
     }
 }

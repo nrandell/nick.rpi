@@ -1,6 +1,7 @@
-﻿using Nick.Rpi.Driver.Bme680;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+
+using Nick.Rpi.Driver;
 
 namespace TestBme680
 {
@@ -8,15 +9,16 @@ namespace TestBme680
     {
         public static async Task Main()
         {
-            Console.WriteLine("Hello World!");
             try
             {
                 var bme680 = new BME680("/dev/i2c-1", 0x76);
-                await bme680.Test(TimeSpan.FromSeconds(1), default);
+                await bme680.Test(TimeSpan.FromSeconds(1), default).ConfigureAwait(false);
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
-                Console.WriteLine($"Error: {ex}");
+                Console.WriteLine(FormattableString.Invariant($"Error: {ex}"));
             }
         }
     }

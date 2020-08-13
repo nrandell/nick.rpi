@@ -1,6 +1,6 @@
 ﻿using uint8_t = System.Byte;
 
-namespace Nick.Rpi.Driver.Bme280
+namespace Nick.Rpi.Driver
 {
     public class BME280
     {
@@ -8,24 +8,24 @@ namespace Nick.Rpi.Driver.Bme280
 
         public BME280(string device, int address)
         {
-            Api.Create(ref _sensor, device, address);
+            NativeMethods.Create(ref _sensor, device, address);
         }
 
         public void SetSensorSettings(ref bme280_settings settings, ushort flags)
         {
             _sensor.settings = settings;
-            Api.SetSensorSettings(flags, ref _sensor);
+            NativeMethods.SetSensorSettings(flags, ref _sensor);
         }
 
         public void SetSensorMode(uint8_t sensorMode)
         {
-            Api.bme280_set_sensor_mode(sensorMode, ref _sensor);
+            NativeMethods.bme280_set_sensor_mode(sensorMode, ref _sensor);
         }
 
         public bme280_data GetSensorData(uint8_t flags)
         {
             var data = new bme280_data();
-            Api.GetSensorData(flags, ref data, ref _sensor);
+            NativeMethods.GetSensorData(flags, ref data, ref _sensor);
             return data;
         }
 

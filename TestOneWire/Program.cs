@@ -1,7 +1,8 @@
-﻿using Nick.Rpi.Driver.Temperature;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Nick.Rpi.Driver.Temperature;
 
 namespace TestOneWire
 {
@@ -15,17 +16,19 @@ namespace TestOneWire
                 var oneWire = new OneWire();
                 while (true)
                 {
-                    var readings = await oneWire.Read(ct);
+                    var readings = await oneWire.Read(ct).ConfigureAwait(false);
                     foreach (var reading in readings)
                     {
                         Console.WriteLine(reading);
                     }
-                    await Task.Delay(TimeSpan.FromSeconds(10), ct);
+                    await Task.Delay(TimeSpan.FromSeconds(10), ct).ConfigureAwait(false);
                 }
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
-                Console.WriteLine($"Error: {ex}");
+                Console.WriteLine(FormattableString.Invariant($"Error: {ex}"));
             }
         }
     }

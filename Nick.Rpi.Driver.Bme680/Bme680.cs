@@ -1,6 +1,6 @@
 ﻿using uint8_t = System.Byte;
 
-namespace Nick.Rpi.Driver.Bme680
+namespace Nick.Rpi.Driver
 {
     using System;
     using System.Threading;
@@ -13,7 +13,7 @@ namespace Nick.Rpi.Driver.Bme680
 
         public BME680(string device, int address)
         {
-            Api.Create(ref _sensor, device, address);
+            NativeMethods.Create(ref _sensor, device, address);
         }
 
         public async Task Test(TimeSpan delay, CancellationToken ct)
@@ -41,14 +41,14 @@ namespace Nick.Rpi.Driver.Bme680
                 | BME680_GAS_SENSOR_SEL;
 
             /* Set the desired sensor configuration */
-            Api.SetSensorSettings(set_required_settings, ref _sensor);
+            NativeMethods.SetSensorSettings(set_required_settings, ref _sensor);
 
             /* Set the power mode */
-            Api.SetSensorMode(ref _sensor);
+            NativeMethods.SetSensorMode(ref _sensor);
 
             /* Get the total measurement duration so as to sleep or wait till the
                  * measurement is complete */
-            var meas_period = Api.GetProfileDuration(ref _sensor);
+            var meas_period = NativeMethods.GetProfileDuration(ref _sensor);
 
             bme680_field_data data = new bme680_field_data();
 
@@ -57,20 +57,19 @@ namespace Nick.Rpi.Driver.Bme680
                 /* Trigger the next measurement if you would like to read data out continuously */
                 if (_sensor.power_mode == BME680_FORCED_MODE)
                 {
-                    Api.SetSensorMode(ref _sensor);
+                    NativeMethods.SetSensorMode(ref _sensor);
                 }
-                await Task.Delay(meas_period, ct);
+                await Task.Delay(meas_period, ct).ConfigureAwait(false);
 
-                Api.GetSensorData(ref data, ref _sensor);
-                Console.Write($"T: {data.temperature / 100.0} degC, P: {data.pressure / 100.0} hPa, H {data.humidity / 1000.0} %rH");
+                NativeMethods.GetSensorData(ref data, ref _sensor);
+                Console.Write(FormattableString.Invariant($"T: {data.temperature / 100.0} degC, P: {data.pressure / 100.0} hPa, H {data.humidity / 1000.0} %rH"));
                 if ((data.status & BME680_GASM_VALID_MSK) == BME680_GASM_VALID_MSK)
                 {
                     Console.Write($", G: {data.gas_resistance} ohms");
                 }
                 Console.WriteLine();
 
-                await Task.Delay(delay, ct);
-
+                await Task.Delay(delay, ct).ConfigureAwait(false);
             }
         }
     }

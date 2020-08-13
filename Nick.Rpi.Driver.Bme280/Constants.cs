@@ -1,8 +1,9 @@
 ﻿using int8_t = System.SByte;
 using uint8_t = System.Byte;
 
-namespace Nick.Rpi.Driver.Bme280
+namespace Nick.Rpi.Driver
 {
+#pragma warning disable CA1707 // Identifiers should not contain underscores
     public static class Constants
     {
         /**\name I2C addresses */
@@ -114,4 +115,5 @@ namespace Nick.Rpi.Driver.Bme280
         public const uint8_t BME280_SOFT_RESET_COMMAND = 0xB6;
         public const uint8_t BME280_STATUS_IM_UPDATE = 0x01;
     }
+#pragma warning restore CA1707 // Identifiers should not contain underscores
 }

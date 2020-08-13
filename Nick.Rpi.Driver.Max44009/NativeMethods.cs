@@ -1,19 +1,14 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 using int8_t = System.SByte;
 
-namespace Nick.Rpi.Driver.Max44009
+namespace Nick.Rpi.Driver
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    public struct Max44009Device
-    {
-        public int fd;
-    }
-
-    public static class Api
+    internal static class NativeMethods
     {
 #pragma warning disable IDE1006 // Naming Styles
-        [DllImport("max44009", SetLastError = true)]
+        [DllImport("max44009", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern int max44009_create(ref Max44009Device sensor, string device, int address);
 
         [DllImport("max44009", SetLastError = true)]
@@ -39,7 +34,7 @@ namespace Nick.Rpi.Driver.Max44009
             if (result < 0)
             {
                 var error = Marshal.GetLastWin32Error();
-                throw new System.InvalidOperationException($"{name} error: {error}");
+                throw new System.InvalidOperationException(FormattableString.Invariant($"{name} error: {error}"));
             }
         }
     }

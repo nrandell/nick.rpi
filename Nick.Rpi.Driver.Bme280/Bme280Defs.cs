@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+
 using bme280_com_fptr_t = System.IntPtr;
 using bme280_delay_fptr_t = System.IntPtr;
 using int16_t = System.Int16;
@@ -9,18 +10,20 @@ using uint16_t = System.UInt16;
 using uint32_t = System.UInt32;
 using uint8_t = System.Byte;
 
-namespace Nick.Rpi.Driver.Bme280
+#pragma warning disable MA0048 // File name must match type name
+#pragma warning disable IDE1006 // Naming Styles
+namespace Nick.Rpi.Driver
 {
     /*!
      * @brief Interface selection Enums
      */
-    public enum bme280_intf
+    internal enum bme280_intf
     {
         /*! SPI interface */
         BME280_SPI_INTF,
 
         /*! I2C interface */
-        BME280_I2C_INTF
+        BME280_I2C_INTF,
     };
 
     /*!
@@ -31,7 +34,7 @@ namespace Nick.Rpi.Driver.Bme280
      * @brief Calibration data
      */
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    public struct bme280_calib_data
+    internal struct bme280_calib_data
     {
         /**
          * @ Trim Variables
@@ -66,7 +69,7 @@ namespace Nick.Rpi.Driver.Bme280
      * pressure and humidity data
      */
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    public struct bme280_uncomp_data
+    internal struct bme280_uncomp_data
     {
         /*! un-compensated pressure */
         public uint32_t pressure;
@@ -77,41 +80,18 @@ namespace Nick.Rpi.Driver.Bme280
         /*! un-compensated humidity */
         public uint32_t humidity;
     };
-
-    /*!
-     * @brief bme280 sensor settings structure which comprises of mode,
-     * oversampling and filter settings.
-     */
-    [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    public struct bme280_settings
-    {
-        /*! pressure oversampling */
-        public uint8_t osr_p;
-
-        /*! temperature oversampling */
-        public uint8_t osr_t;
-
-        /*! humidity oversampling */
-        public uint8_t osr_h;
-
-        /*! filter coefficient */
-        public uint8_t filter;
-
-        /*! standby time */
-        public uint8_t standby_time;
-    };
+#pragma warning restore CA1051 // Do not declare visible instance fields
 
     /*!
      * @brief bme280 device structure
      */
     [StructLayout(LayoutKind.Sequential, Pack = 0)]
-    public struct bme280_dev
+    internal struct bme280_dev
     {
         /*! Chip Id */
         public uint8_t chip_id;
 
-        /*! Device Id */
-        public uint8_t dev_id;
+        public IntPtr intf_ptr;
 
         /*! SPI/I2C interface */
         public bme280_intf intf;
@@ -131,67 +111,6 @@ namespace Nick.Rpi.Driver.Bme280
         /*! Sensor settings */
         public bme280_settings settings;
     }
-
-    public static class Api
-    {
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_init(ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_set_regs(in uint8_t[] reg_addr, in uint8_t[] reg_data, uint8_t len, ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_get_regs(uint8_t reg_addr, ref uint8_t[] reg_data, uint16_t len, ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_set_sensor_settings(uint16_t desired_settings, ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_get_sensor_settings(ref uint16_t settings, ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int bme280_create(ref bme280_dev sensor, string device, int address);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int bme280_delete(ref bme280_dev sensor);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_set_sensor_mode(uint8_t sensor_mode, ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_get_sensor_mode(ref uint8_t sensor_mode, ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_soft_reset(ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_get_sensor_data(uint8_t sensor_comp, ref bme280_data comp_data, ref bme280_dev dev);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern void bme280_parse_sensor_data(ref uint8_t[] reg_data, ref bme280_uncomp_data uncomp_data);
-
-        [DllImport("bme280", SetLastError = true)]
-        public static extern int8_t bme280_compensate_data(uint8_t sensor_comp,
-                              ref bme280_uncomp_data uncomp_data,
-                              ref bme280_data comp_data,
-                              ref bme280_calib_data calib_data);
-
-        private static void CheckError(string name, int result)
-        {
-            if (result < 0)
-            {
-                var error = Marshal.GetLastWin32Error();
-                throw new System.InvalidOperationException($"{name} error: {error}");
-            }
-        }
-
-        public static void Create(ref bme280_dev sensor, string device, int address) => CheckError("Create", bme280_create(ref sensor, device, address));
-
-        public static void Delete(ref bme280_dev sensor) => CheckError("Delete", bme280_delete(ref sensor));
-
-        public static void SetSensorSettings(uint16_t settings_sel, ref bme280_dev sensor) => CheckError("Set sensor settings", bme280_set_sensor_settings(settings_sel, ref sensor));
-
-        public static void GetSensorData(byte sensor_comp, ref bme280_data comp_data, ref bme280_dev sensor) =>
-            CheckError("Get sensor data", bme280_get_sensor_data(sensor_comp, ref comp_data, ref sensor));
-    }
 }
+#pragma warning restore IDE1006 // Naming Styles
+#pragma warning restore MA0048 // File name must match type name

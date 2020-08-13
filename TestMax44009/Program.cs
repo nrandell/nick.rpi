@@ -1,7 +1,8 @@
-﻿using Nick.Rpi.Driver.Max44009;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Nick.Rpi.Driver;
 
 namespace TestMax44009
 {
@@ -19,13 +20,15 @@ namespace TestMax44009
                 while (!ct.IsCancellationRequested)
                 {
                     var lux = max44009.Read();
-                    Console.WriteLine($"Lix = {lux}");
-                    await Task.Delay(1000, ct);
+                    Console.WriteLine(FormattableString.Invariant($"Lux = {lux}"));
+                    await Task.Delay(1000, ct).ConfigureAwait(false);
                 }
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
-                Console.WriteLine($"Error: {ex}");
+                Console.WriteLine(FormattableString.Invariant($"Error: {ex}"));
             }
         }
     }

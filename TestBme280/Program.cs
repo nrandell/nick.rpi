@@ -1,7 +1,8 @@
-﻿using Nick.Rpi.Driver.Bme280;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Nick.Rpi.Driver;
 
 namespace TestBme280
 {
@@ -21,7 +22,7 @@ namespace TestBme280
                     osr_h = BME280_OVERSAMPLING_1X,
                     osr_p = BME280_OVERSAMPLING_1X,
                     osr_t = BME280_OVERSAMPLING_1X,
-                    filter = BME280_FILTER_COEFF_OFF
+                    filter = BME280_FILTER_COEFF_OFF,
                 };
 
                 bme280.SetSensorSettings(ref settings, BME280_OSR_HUM_SEL | BME280_OSR_PRESS_SEL | BME280_OSR_TEMP_SEL);
@@ -31,13 +32,15 @@ namespace TestBme280
                     bme280.SetSensorMode(BME280_FORCED_MODE);
                     await Task.Delay(100, ct).ConfigureAwait(false);
                     var data = bme280.GetSensorData(BME280_ALL);
-                    Console.WriteLine($"T: {data.temperature / 100.0} degC, P: {data.pressure / 100.0} Pascal, H: {data.humidity / 1024.0} %rH");
+                    Console.WriteLine(FormattableString.Invariant($"T: {data.temperature / 100.0} degC, P: {data.pressure / 100.0} Pascal, H: {data.humidity / 1024.0} %rH"));
                     await Task.Delay(1000, ct).ConfigureAwait(false);
                 }
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
-                Console.WriteLine($"Error: {ex}");
+                Console.WriteLine(FormattableString.Invariant($"Error: {ex}"));
             }
         }
     }
